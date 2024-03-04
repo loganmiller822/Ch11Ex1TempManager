@@ -21,6 +21,13 @@ namespace Ch11Ex1TempManager.Controllers
         [HttpPost]
         public IActionResult Add(Temp temp)
         {
+            bool isDuplicateDate = data.Temps.Any(t => t.Date == temp.Date && t.Id != temp.Id);
+
+            if (isDuplicateDate)
+            {
+                ModelState.AddModelError(nameof(Temp.Date), "A Temp object with this date already exists.");
+            }
+
             if (ModelState.IsValid)
             {
                 data.Temps.Add(temp);
@@ -34,6 +41,7 @@ namespace Ch11Ex1TempManager.Controllers
                 return View(temp);
             }
         }
+
 
         [HttpGet]
         public ViewResult Delete(int id)
